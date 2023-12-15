@@ -83,8 +83,35 @@ Kemudian anda diminta untuk mendesain arsitektur cloud yang sesuai dengan kebutu
 
 ## Langkah Implementasi
 
-1. Membuat Resource Group untuk mengelompokan sumber daya yang akan digunakan. Disini kami memberi nama FP-TKA.
-2. Membuat Virtual Machine menggunakan Azure
+### Membuat Virtual Machine Aplikasi
+
+1. Membuat Resource Group untuk mengelompokan sumber daya yang akan digunakan. Disini kami memberi nama `FP-TKA`.
+2. Membuat Virtual Machine menggunakan Azure dengan konfigurasi sebagai berikut:
+
+![vm app 1](konfigurasi/conf-app/1.png)
+
+di VM aplikasi, kami menggunakan ubuntu sebagai
+
+![vm app 2](konfigurasi/conf-app/2.png)
+
+![vm app 3](konfigurasi/conf-app/3.png)
+
+3. Selanjutnya, klik tombol `next` yang ada di pojok kanan bawah hingga ke halaman terakhir.
+4. Jika sudah di halaman terakhir dan tidak terjadi error, klik tombol `review + create` yang ada di pojok kiri bawah.
+5. Terakhir, tunggu virtual machine yang telah kita buat di deploy oleh azure.
+
+### Membuat Virtual Machine Load Balancer
+
+1. Membuat Resource Group untuk mengelompokan sumber daya yang akan digunakan. Disini kami memberi nama `FP-TKA`.
+2. Selanjutnya, membuat VM dengan Konfigurasi sebagai berikut:
+
+![vm lb 1](konfigurasi/conf-load/1.png)
+
+![vm lb 2](konfigurasi/conf-load/2.png)
+
+3.
+
+### Konfigurasi VM Aplikasi dan Load Balancer
 
 ## Hasil Pengujian Endpoint
 
