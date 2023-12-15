@@ -185,15 +185,19 @@ sudo cp default /etc/nginx/sites-available/default
 # Cek nginx
 sudo nginx -t
 ```
+
 Kemudian pengguna melakukan setup database untuk masing-masing VM. Pertama pengguna menjalankan command berikut:
 
 ```bash
 sudo systemctl start mongod
 ```
+
 Kemudian pengguna masuk ke shell mongo dengan menjalankan:
+
 ```bash
 mongosh
 ```
+
 Kemudian dalam mongosh, pengguna menjalankan
 
 ```bash
@@ -201,8 +205,8 @@ use orders-db
 db.createCollection("orders")
 ```
 
-
 ### Konfigurasi Load Balancer
+
 Pertama, buat directory `local`
 
 ```bash
@@ -241,10 +245,12 @@ Delete By ID:
 ![vm lb 1](endpointtest/deleteorder.png)
 
 ## Load Testing
+
 Berikut adalah spreadsheet hasil percobaan Load Testing menggunakan Locust:
 ![Loadtesting](gambarfp/loadtesting.png)
 Spreadsheet lengkapnya dapat diakses di:
 https://docs.google.com/spreadsheets/d/1YDEJGyErlGYz20uCw6dCNe4Wu2efgEW7ZK4hPFF_LTA/edit#gid=50051680
+
 ## Kesimpulan dan Saran
 
 ### Kesimpulan
