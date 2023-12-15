@@ -111,8 +111,8 @@ di VM aplikasi, kami menggunakan ubuntu sebagai
 
 3.
 
-### Konfigurasi VM Aplikasi dan Load Balancer
-#### Konfigurasi VM Aplikasi
+
+### Konfigurasi VM Aplikasi
 Untuk konfigurasi VM Worker, pertama harus menginstall beberapa app dependencies sebagai berikut:
 ```bash
 sudo apt-get install nginx
@@ -127,14 +127,14 @@ Setelah itu, kita membuat directory baru bernama  `local`
 mkdir local
 ```
 
-Setelah itu, pengguna harus berpindah ke PC Operator dan melakukan 2 worker VM menggunakan command berikut:
+Setelah itu, pengguna harus berpindah ke PC Operator dan melakukan konfigurasi 2 worker VM menggunakan command berikut:
 ```bash
-# Buat vm app1
+# Untuk vm app1
 # Kirim file app.py dan app di app1
 scp -i linux.pem app.py azureuser@20.211.49.205:~/local/app.py
 scp -i linux.pem app azureuser@20.211.49.205:~/local/default
 
-# Buat VM app2
+# Untuk VM app2
 # Kirim file app.py dan app di app2
 scp -i app2_key.pem app.py azureuser@20.5.224.152:~/local/app.py
 scp -i app2_key.pem app azureuser@20.5.224.152:~/local/default
@@ -164,27 +164,35 @@ sudo cp default /etc/nginx/sites-available/default
 
 # Cek nginx
 sudo nginx -t
+```
+Kemudian pengguna melakukan setup database untuk masing-masing VM. Pertama pengguna menjalankan command berikut:
 
+```bash
 sudo systemctl start mongod
-#------------------------
-# d dlm mongosh, akses pake mongosh
-#------------------------
-# use orders-db
-# db.createCollection("orders")
-#------------------------
+```
+Kemudian pengguna masuk ke shell mongo dengan menjalankan:
+```bash
+mongosh
+```
+Kemudian dalam mongosh, pengguna menjalankan
+
+```bash
+use orders-db
+db.createCollection("orders")
 ```
 
-#### Konfigurasi Load Balancer
+
+### Konfigurasi Load Balancer
 Pertama, buat directory `local`
 ```bash
 mkdir local
 ```
-Kemudian berpindah dari app VM ke PC Operator untuk menjalankan command berikut:
+Kemudian berpindah dari app VM Load Balancer ke PC Operator untuk menjalankan command berikut:
 ```bash
 # Kirim file nginx.conf ke nginx load balancer
 scp -i linuxLoad.pem nginx.conf azureuser@172.207.25.178:~/local/default
 ```
-Kemudian pindah dari PC Operator ke app VM dan set konfigurasi load balancer.
+Kemudian pindah dari PC Operator ke VM Load Balancer dan set konfigurasi load balancer.
 ```bash
 sudo cd ~/local # pergi ke folder local tempatnya file2 dr pc operator
 sudo cp default /etc/nginx/sites-available/default # jalanin command ini untuk set konfigurasi load balancer
@@ -207,5 +215,8 @@ Delete By ID:
 ![vm lb 1](endpointtest/deleteorder.png)
 
 ## Load Testing
-
+Berikut adalah spreadsheet hasil percobaan Load Testing menggunakan Locust:
+![Loadtesting](gambarfp/loadtesting.png)
+Spreadsheet lengkapnya dapat diakses di:
+https://docs.google.com/spreadsheets/d/1YDEJGyErlGYz20uCw6dCNe4Wu2efgEW7ZK4hPFF_LTA/edit#gid=50051680
 ## Kesimpulan dan Saran
