@@ -250,11 +250,13 @@ https://docs.google.com/spreadsheets/d/1YDEJGyErlGYz20uCw6dCNe4Wu2efgEW7ZK4hPFF_
 ### Kesimpulan
 
 - Berhasil membuat VM dengan harga di bawah budget dan berjalan dengan baik.
-- Biaya lebih murah karna resouse menyesuaikan dengan kebutuhan request
+- Biaya lebih murah karna resource menyesuaikan dengan kebutuhan request.
+- Terdapat kendala di bagian database, dimana terdapat ketidakpastian terhadap data yang di ambil atau di ubah. Disebabkan karena penggunaan database di dalam VM masing-masing worker.
+- Aplikasi masih belum bisa menangani spawn rate tinggi dikarenakan hanya terdapat 2 VM Worker. Hal ini dapat di tingkatkan dengan menambah worker di masa mendatang ketika budget sudah mumpuni.
 
 ### Saran
 
-Saat ini database untuk aplikasi ini di jalankan di dalam VM masing-masing. Hal ini menyebabkan ketidak sinkronan antar ke dua VM aplikasi.
+Saat ini database untuk aplikasi ini di jalankan di dalam VM masing-masing worker. Hal ini menyebabkan ketidak sinkronan antar ke dua VM aplikasi.
 
 Sehingga ketika melakukan GET /orders kadangkala data yang didapatkan adalah data dari VM 1 dan kadangkala data yang didapatkan juga di VM 2. Hal ini juga berefek untuk fitur-fitur lainnya, seperti ketika melakukan POST, maka ada kemungkinan data disimpan di VM 1 atau VM 2.
 
