@@ -124,9 +124,7 @@ Kemudian anda diminta untuk mendesain arsitektur cloud yang sesuai dengan kebutu
 4. Jika sudah di halaman terakhir dan tidak terjadi error, klik tombol `review + create` yang ada di pojok kiri bawah.
 5. Terakhir, tunggu virtual machine yang telah kita buat di deploy oleh azure.
 
-### Konfigurasi VM Aplikasi dan Load Balancer
-
-#### Konfigurasi VM Aplikasi
+### Konfigurasi VM Aplikasi
 
 Untuk konfigurasi VM Worker, pertama harus menginstall beberapa app dependencies sebagai berikut:
 
