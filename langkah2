@@ -10,9 +10,11 @@ A. VM aplikasi
 
 4. Kemudia tunggu VM di deploy oleh azure
 
-( yang VM Load Balancer jg kurleb sma cara2nya, beda di konfigurasinya. Mungkin tambahin jg jelasin pake konfigurasi ubuntu buat Vm aplikasi dan nginx buat VM load balancer, sama set mesinnya jg ksh tau yang brp gb dan sbgnya)
+( yang VM Load Balancer jg kurleb sma cara2nya, beda di konfigurasinya. Mungkin tambahin jg jelasin pake konfigurasi ubuntu buat Vm aplikasi dan nginx buat VM load balancer, sama set mesinnya jg ksh tau yang brp gb dan sbgnya, untuk load balancer foto2 konfnya ada di coonf-load)
 
 Konfigurasi VM aplikasi & Load Balancer:
+( ksh tau cara akses vmnya )
+
 (di app.sh, jalanin semuanya sesuai dgn urutan. Ksh jg penjelasan untuk setiap command nya, udh ku ksh tau di app.sh)
 (yang load balancer jg sma, di load.sh)
 

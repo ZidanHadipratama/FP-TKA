@@ -8,9 +8,9 @@ sudo chown 600 linuxLoad.pem
 sudo chown 600 app2_key.pem
 
 # Akses ke VM
-# ssh -i linux.pem azureuser@20.211.49.205 #app1
-# ssh -i app2_key.pem azureuser@20.5.224.152 #app2
-# ssh -i linuxLoad.pem azureuser@172.207.25.178 #loadBalancer
+ssh -i linux.pem azureuser@20.211.49.205 #app1
+ssh -i app2_key.pem azureuser@20.5.224.152 #app2
+ssh -i linuxLoad.pem azureuser@172.207.25.178 #loadBalancer
 
 # Kirim file ke VM
 # scp -i linux.pem <<file>> azureuser@20.211.49.205:~/local/<<file>>
