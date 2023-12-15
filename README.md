@@ -191,6 +191,20 @@ sudo cp default /etc/nginx/sites-available/default # jalanin command ini untuk s
 ```
 
 ## Hasil Pengujian Endpoint
+Create New Order:
+![vm lb 1](endpointtest/neworder.png)
+
+Get Specific Order By ID:
+![vm lb 1](endpointtest/getspecificorderbyid.png)
+
+Get All Orders:
+![vm lb 1](endpointtest/getallorder.png)
+
+Update Order By ID:
+![vm lb 1](endpointtest/updateorderbyid.png)
+
+Delete By ID:
+![vm lb 1](endpointtest/deleteorder.png)
 
 ## Load Testing
 
