@@ -112,6 +112,83 @@ di VM aplikasi, kami menggunakan ubuntu sebagai
 3.
 
 ### Konfigurasi VM Aplikasi dan Load Balancer
+#### Konfigurasi VM Aplikasi
+Untuk konfigurasi VM Worker, pertama harus menginstall beberapa app dependencies sebagai berikut:
+```bash
+sudo apt-get install nginx
+sudo apt-get install python3
+sudo apt install python3-pip
+pip install Flask Flask-PyMongo
+pip install pymongo
+pip install gunicorn
+```
+Setelah itu, kita membuat directory baru bernama  `local`
+```bash
+mkdir local
+```
+
+Setelah itu, pengguna harus berpindah ke PC Operator dan melakukan 2 worker VM menggunakan command berikut:
+```bash
+# Buat vm app1
+# Kirim file app.py dan app di app1
+scp -i linux.pem app.py azureuser@20.211.49.205:~/local/app.py
+scp -i linux.pem app azureuser@20.211.49.205:~/local/default
+
+# Buat VM app2
+# Kirim file app.py dan app di app2
+scp -i app2_key.pem app.py azureuser@20.5.224.152:~/local/app.py
+scp -i app2_key.pem app azureuser@20.5.224.152:~/local/default
+```
+
+Kemudian user harus berpindah ke VM aplikasi dan meng-install mongodb dan mongosh
+```bash
+# install mongodb
+sudo apt-get install gnupg curl
+curl -fsSL https://pgp.mongodb.com/server-7.0.asc | \
+   sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg \
+   --dearmor
+echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+sudo apt-get update
+sudo apt-get install -y mongodb-org
+
+# install mongosh
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+sudo apt-get update
+sudo apt-get install -y mongodb-mongosh
+```
+Langkah selanjutnya adalah men-copy konfigurasi nginx dan cek nginx menggunakan:
+```bash
+# Copy configurasi nginx
+sudo cd ~/local
+sudo cp default /etc/nginx/sites-available/default
+
+# Cek nginx
+sudo nginx -t
+
+sudo systemctl start mongod
+#------------------------
+# d dlm mongosh, akses pake mongosh
+#------------------------
+# use orders-db
+# db.createCollection("orders")
+#------------------------
+```
+
+#### Konfigurasi Load Balancer
+Pertama, buat directory `local`
+```bash
+mkdir local
+```
+Kemudian berpindah dari app VM ke PC Operator untuk menjalankan command berikut:
+```bash
+# Kirim file nginx.conf ke nginx load balancer
+scp -i linuxLoad.pem nginx.conf azureuser@172.207.25.178:~/local/default
+```
+Kemudian pindah dari PC Operator ke app VM dan set konfigurasi load balancer.
+```bash
+sudo cd ~/local # pergi ke folder local tempatnya file2 dr pc operator
+sudo cp default /etc/nginx/sites-available/default # jalanin command ini untuk set konfigurasi load balancer
+```
 
 ## Hasil Pengujian Endpoint
 
