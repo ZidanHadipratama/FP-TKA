@@ -12,6 +12,20 @@ pip install gunicorn
 
 mkdir local
 
+# --------------------------------
+# ke pc operator dlu, trs jalanin command ini
+# --------------------------------
+# Buat vm app1
+# # Kirim file app.py dan app di app1
+# scp -i linux.pem app.py azureuser@20.211.49.205:~/local/app.py
+# scp -i linux.pem app azureuser@20.211.49.205:~/local/default
+#
+# Buat VM app2
+# # Kirim file app.py dan app di app2
+# scp -i app2_key.pem app.py azureuser@20.5.224.152:~/local/app.py
+# scp -i app2_key.pem app azureuser@20.5.224.152:~/local/default
+# --------------------------------
+
 # install mongodb
 sudo apt-get install gnupg curl
 curl -fsSL https://pgp.mongodb.com/server-7.0.asc | \
