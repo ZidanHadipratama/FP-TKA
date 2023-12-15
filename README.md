@@ -88,9 +88,14 @@ Kemudian anda diminta untuk mendesain arsitektur cloud yang sesuai dengan kebutu
 1. Membuat Resource Group untuk mengelompokan sumber daya yang akan digunakan. Disini kami memberi nama `FP-TKA`.
 2. Membuat Virtual Machine menggunakan Azure dengan konfigurasi sebagai berikut:
 
-![vm app 1](konfigurasi/conf-app/1.png)
+   - Menggunakan resource group yang telah dibuat, yaitu `FP-TKA`
+   - Menggunakan ubuntu sebagai konfigurasinya
+   - Menggunakan `x64` sebagai VM Architecturenya.
+   - Memilih size dengan spesifikasi `1 vcpu, 2GiB memory ($19.27/month)`
+   - Menggunakan `SSH public key` sebagai authentication type.
+   - Memilih untuk `Allow selected port` agar port yang dibuat bisa diakses di internet. Port yang bisa diakses adalah `HTTP (80) dan SSH (22)`.
 
-di VM aplikasi, kami menggunakan ubuntu sebagai
+![vm app 1](konfigurasi/conf-app/1.png)
 
 ![vm app 2](konfigurasi/conf-app/2.png)
 
@@ -105,15 +110,26 @@ di VM aplikasi, kami menggunakan ubuntu sebagai
 1. Membuat Resource Group untuk mengelompokan sumber daya yang akan digunakan. Disini kami memberi nama `FP-TKA`.
 2. Selanjutnya, membuat VM dengan Konfigurasi sebagai berikut:
 
+   - Menggunakan resource group yang telah dibuat, yaitu `FP-TKA`.
+   - Menggunakan Nginx sebagai konfigurasinya.
+   - Menggunakan `x64` sebagai VM Architecturenya.
+   - Memilih size dengan spesifikasi `1 vcpu, 1GiB memory ($9.64/month)`.
+   - Menggunakan `SSH public key` sebagai authentication type.
+
 ![vm lb 1](konfigurasi/conf-load/1.png)
 
 ![vm lb 2](konfigurasi/conf-load/2.png)
 
-3.
+3. Selanjutnya, klik tombol `next` yang ada di pojok kanan bawah hingga ke halaman terakhir.
+4. Jika sudah di halaman terakhir dan tidak terjadi error, klik tombol `review + create` yang ada di pojok kiri bawah.
+5. Terakhir, tunggu virtual machine yang telah kita buat di deploy oleh azure.
 
+### Konfigurasi VM Aplikasi dan Load Balancer
 
-### Konfigurasi VM Aplikasi
+#### Konfigurasi VM Aplikasi
+
 Untuk konfigurasi VM Worker, pertama harus menginstall beberapa app dependencies sebagai berikut:
+
 ```bash
 sudo apt-get install nginx
 sudo apt-get install python3
@@ -122,12 +138,15 @@ pip install Flask Flask-PyMongo
 pip install pymongo
 pip install gunicorn
 ```
-Setelah itu, kita membuat directory baru bernama  `local`
+
+Setelah itu, kita membuat directory baru bernama `local`
+
 ```bash
 mkdir local
 ```
 
 Setelah itu, pengguna harus berpindah ke PC Operator dan melakukan konfigurasi 2 worker VM menggunakan command berikut:
+
 ```bash
 # Untuk vm app1
 # Kirim file app.py dan app di app1
@@ -141,6 +160,7 @@ scp -i app2_key.pem app azureuser@20.5.224.152:~/local/default
 ```
 
 Kemudian user harus berpindah ke VM aplikasi dan meng-install mongodb dan mongosh
+
 ```bash
 # install mongodb
 sudo apt-get install gnupg curl
@@ -156,7 +176,9 @@ echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb
 sudo apt-get update
 sudo apt-get install -y mongodb-mongosh
 ```
+
 Langkah selanjutnya adalah men-copy konfigurasi nginx dan cek nginx menggunakan:
+
 ```bash
 # Copy configurasi nginx
 sudo cd ~/local
@@ -184,21 +206,27 @@ db.createCollection("orders")
 
 ### Konfigurasi Load Balancer
 Pertama, buat directory `local`
+
 ```bash
 mkdir local
 ```
+
 Kemudian berpindah dari app VM Load Balancer ke PC Operator untuk menjalankan command berikut:
+
 ```bash
 # Kirim file nginx.conf ke nginx load balancer
 scp -i linuxLoad.pem nginx.conf azureuser@172.207.25.178:~/local/default
 ```
+
 Kemudian pindah dari PC Operator ke VM Load Balancer dan set konfigurasi load balancer.
+
 ```bash
 sudo cd ~/local # pergi ke folder local tempatnya file2 dr pc operator
 sudo cp default /etc/nginx/sites-available/default # jalanin command ini untuk set konfigurasi load balancer
 ```
 
 ## Hasil Pengujian Endpoint
+
 Create New Order:
 ![vm lb 1](endpointtest/neworder.png)
 
@@ -220,3 +248,16 @@ Berikut adalah spreadsheet hasil percobaan Load Testing menggunakan Locust:
 Spreadsheet lengkapnya dapat diakses di:
 https://docs.google.com/spreadsheets/d/1YDEJGyErlGYz20uCw6dCNe4Wu2efgEW7ZK4hPFF_LTA/edit#gid=50051680
 ## Kesimpulan dan Saran
+
+### Kesimpulan
+
+- Berhasil membuat VM dengan harga di bawah budget dan berjalan dengan baik.
+- Biaya lebih murah karna resouse menyesuaikan dengan kebutuhan request
+
+### Saran
+
+Saat ini database untuk aplikasi ini di jalankan di dalam VM masing-masing. Hal ini menyebabkan ketidak sinkronan antar ke dua VM aplikasi.
+
+Sehingga ketika melakukan GET /orders kadangkala data yang didapatkan adalah data dari VM 1 dan kadangkala data yang didapatkan juga di VM 2. Hal ini juga berefek untuk fitur-fitur lainnya, seperti ketika melakukan POST, maka ada kemungkinan data disimpan di VM 1 atau VM 2.
+
+Maka kedepannya, ada baiknya diciptakan VM database yang khusus untuk menampung berbagai data aplikasi. Sehingga aplikasi memiliki 1 lokasi yang sama untuk mengambil dan mengedit data.
