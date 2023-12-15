@@ -91,7 +91,7 @@ Kemudian anda diminta untuk mendesain arsitektur cloud yang sesuai dengan kebutu
    - Menggunakan resource group yang telah dibuat, yaitu `FP-TKA`
    - Menggunakan ubuntu sebagai konfigurasinya
    - Menggunakan `x64` sebagai VM Architecturenya.
-   - Memilih size dengan ukuran `4GiB memory ($38.54/month)`
+   - Memilih size dengan spesifikasi `1 vcpu, 2GiB memory ($19.27/month)`
    - Menggunakan `SSH public key` sebagai authentication type.
    - Memilih untuk `Allow selected port` agar port yang dibuat bisa diakses di internet. Port yang bisa diakses adalah `HTTP (80) dan SSH (22)`.
 
@@ -125,8 +125,11 @@ Kemudian anda diminta untuk mendesain arsitektur cloud yang sesuai dengan kebutu
 5. Terakhir, tunggu virtual machine yang telah kita buat di deploy oleh azure.
 
 ### Konfigurasi VM Aplikasi dan Load Balancer
+
 #### Konfigurasi VM Aplikasi
+
 Untuk konfigurasi VM Worker, pertama harus menginstall beberapa app dependencies sebagai berikut:
+
 ```bash
 sudo apt-get install nginx
 sudo apt-get install python3
@@ -135,12 +138,15 @@ pip install Flask Flask-PyMongo
 pip install pymongo
 pip install gunicorn
 ```
-Setelah itu, kita membuat directory baru bernama  `local`
+
+Setelah itu, kita membuat directory baru bernama `local`
+
 ```bash
 mkdir local
 ```
 
 Setelah itu, pengguna harus berpindah ke PC Operator dan melakukan 2 worker VM menggunakan command berikut:
+
 ```bash
 # Buat vm app1
 # Kirim file app.py dan app di app1
@@ -154,6 +160,7 @@ scp -i app2_key.pem app azureuser@20.5.224.152:~/local/default
 ```
 
 Kemudian user harus berpindah ke VM aplikasi dan meng-install mongodb dan mongosh
+
 ```bash
 # install mongodb
 sudo apt-get install gnupg curl
@@ -169,7 +176,9 @@ echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb
 sudo apt-get update
 sudo apt-get install -y mongodb-mongosh
 ```
+
 Langkah selanjutnya adalah men-copy konfigurasi nginx dan cek nginx menggunakan:
+
 ```bash
 # Copy configurasi nginx
 sudo cd ~/local
@@ -188,22 +197,29 @@ sudo systemctl start mongod
 ```
 
 #### Konfigurasi Load Balancer
+
 Pertama, buat directory `local`
+
 ```bash
 mkdir local
 ```
+
 Kemudian berpindah dari app VM ke PC Operator untuk menjalankan command berikut:
+
 ```bash
 # Kirim file nginx.conf ke nginx load balancer
 scp -i linuxLoad.pem nginx.conf azureuser@172.207.25.178:~/local/default
 ```
+
 Kemudian pindah dari PC Operator ke app VM dan set konfigurasi load balancer.
+
 ```bash
 sudo cd ~/local # pergi ke folder local tempatnya file2 dr pc operator
 sudo cp default /etc/nginx/sites-available/default # jalanin command ini untuk set konfigurasi load balancer
 ```
 
 ## Hasil Pengujian Endpoint
+
 Create New Order:
 ![vm lb 1](endpointtest/neworder.png)
 
@@ -229,3 +245,9 @@ Delete By ID:
 - Biaya lebih murah karna resouse menyesuaikan dengan kebutuhan request
 
 ### Saran
+
+Saat ini database untuk aplikasi ini di jalankan di dalam VM masing-masing. Hal ini menyebabkan ketidak sinkronan antar ke dua VM aplikasi.
+
+Sehingga ketika melakukan GET /orders kadangkala data yang didapatkan adalah data dari VM 1 dan kadangkala data yang didapatkan juga di VM 2. Hal ini juga berefek untuk fitur-fitur lainnya, seperti ketika melakukan POST, maka ada kemungkinan data disimpan di VM 1 atau VM 2.
+
+Maka kedepannya, ada baiknya diciptakan VM database yang khusus untuk menampung berbagai data aplikasi. Sehingga aplikasi memiliki 1 lokasi yang sama untuk mengambil dan mengedit data.
