@@ -88,9 +88,14 @@ Kemudian anda diminta untuk mendesain arsitektur cloud yang sesuai dengan kebutu
 1. Membuat Resource Group untuk mengelompokan sumber daya yang akan digunakan. Disini kami memberi nama `FP-TKA`.
 2. Membuat Virtual Machine menggunakan Azure dengan konfigurasi sebagai berikut:
 
-![vm app 1](konfigurasi/conf-app/1.png)
+   - Menggunakan resource group yang telah dibuat, yaitu `FP-TKA`
+   - Menggunakan ubuntu sebagai konfigurasinya
+   - Menggunakan `x64` sebagai VM Architecturenya.
+   - Memilih size dengan ukuran `4GiB memory ($38.54/month)`
+   - Menggunakan `SSH public key` sebagai authentication type.
+   - Memilih untuk `Allow selected port` agar port yang dibuat bisa diakses di internet. Port yang bisa diakses adalah `HTTP (80) dan SSH (22)`.
 
-di VM aplikasi, kami menggunakan ubuntu sebagai
+![vm app 1](konfigurasi/conf-app/1.png)
 
 ![vm app 2](konfigurasi/conf-app/2.png)
 
@@ -105,11 +110,19 @@ di VM aplikasi, kami menggunakan ubuntu sebagai
 1. Membuat Resource Group untuk mengelompokan sumber daya yang akan digunakan. Disini kami memberi nama `FP-TKA`.
 2. Selanjutnya, membuat VM dengan Konfigurasi sebagai berikut:
 
+   - Menggunakan resource group yang telah dibuat, yaitu `FP-TKA`.
+   - Menggunakan Nginx sebagai konfigurasinya.
+   - Menggunakan `x64` sebagai VM Architecturenya.
+   - Memilih size dengan spesifikasi `1 vcpu, 1GiB memory ($9.64/month)`.
+   - Menggunakan `SSH public key` sebagai authentication type.
+
 ![vm lb 1](konfigurasi/conf-load/1.png)
 
 ![vm lb 2](konfigurasi/conf-load/2.png)
 
-3.
+3. Selanjutnya, klik tombol `next` yang ada di pojok kanan bawah hingga ke halaman terakhir.
+4. Jika sudah di halaman terakhir dan tidak terjadi error, klik tombol `review + create` yang ada di pojok kiri bawah.
+5. Terakhir, tunggu virtual machine yang telah kita buat di deploy oleh azure.
 
 ### Konfigurasi VM Aplikasi dan Load Balancer
 
@@ -118,3 +131,10 @@ di VM aplikasi, kami menggunakan ubuntu sebagai
 ## Load Testing
 
 ## Kesimpulan dan Saran
+
+### Kesimpulan
+
+- Berhasil membuat VM dengan harga di bawah budget dan berjalan dengan baik.
+- Biaya lebih murah karna resouse menyesuaikan dengan kebutuhan request
+
+### Saran
