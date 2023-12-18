@@ -267,3 +267,17 @@ Saat ini database untuk aplikasi ini di jalankan di dalam VM masing-masing worke
 Sehingga ketika melakukan GET /orders kadangkala data yang didapatkan adalah data dari VM 1 dan kadangkala data yang didapatkan juga di VM 2. Hal ini juga berefek untuk fitur-fitur lainnya, seperti ketika melakukan POST, maka ada kemungkinan data disimpan di VM 1 atau VM 2.
 
 Maka kedepannya, ada baiknya diciptakan VM database yang khusus untuk menampung berbagai data aplikasi. Sehingga aplikasi memiliki 1 lokasi yang sama untuk mengambil dan mengedit data.
+
+
+## Revisi
+
+- Untuk menyelesaikan masalah sebelumnya, diciptakan sebuah database dengan bantuan cosmos DB dari azure dan memilih yang memiliki konfigurasi mongo DB.
+- Untuk semua settingan di set secara default, kecuali untuk mencentang `Free Tier` dan `Allow public access from Azure services and resources within Azure to this cluste`.
+- Mengubah URI untuk aplikasi menjadi connection string yang disediakan oleh cosmos DB.
+- Mematikan dan menyalakan aplikasi di masing-masing worker.
+- Set up selesai, sekarang semua worker menggunakan satu database sehingga tidak ada perbedaan data di antara keduanya.
+
+Berikut gambar konfigurasi untuk fptka-db:
+![vm db 1](konfigurasi/conf-db/1.png)
+
+![vm db 2](konfigurasi/conf-db/2.png)
